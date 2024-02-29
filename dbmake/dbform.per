@@ -1,0 +1,30 @@
+LAYOUT (TEXT="Create Database")
+   GRID
+{
+<g "Create Database"                              >
+[btn001    ]
+["Database Type: "][fld001]
+
+<g "Database Info"                                >
+[txt001                                         ]
+[                                               ]
+[                                               ]
+[                                               ]
+[                                               ]
+[                                               ]
+[                                               ]
+[                                               ]
+[                                               ]
+[                                               ]
+[                                               ]
+}
+   END --GRID
+END --LAYOUT
+
+ATTRIBUTES
+
+   BUTTON btn001 : do_create, TEXT="Create Database";
+   EDIT fld001 = formonly.db_type;
+   TEXTEDIT txt001 = formonly.db_info, STRETCH=BOTH;
+
+END --ATTRIBUTES

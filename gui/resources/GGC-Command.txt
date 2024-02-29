@@ -1,0 +1,7 @@
+ggcgen bdl --check-value \
+           --check-messages \
+			  --check-focus \
+			  --no-wait \
+			  OrderEntryPlus_mikefolcher-62a842bd.gbclog
+
+ggcgen bdl --check-value --check-messages --check-focus --no-wait statetxt.gbclog

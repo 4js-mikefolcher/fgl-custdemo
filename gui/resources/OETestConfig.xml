@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<TestGroups>
+	<TestGroup app="OrderEntryPlus">
+		<Test app="OEAddTest" dir="../testbin">
+			Order Entry Add Test
+		</Test>
+		<Test app="OEQuantityTest" dir="../testbin">
+			Order Entry Quantity Test
+		</Test>
+		<Test app="OEOrderDateTest" dir="../testbin">
+			Order Entry Order Date Test
+		</Test>
+		<Test app="OEDeleteCancelTest" dir="../testbin">
+			Order Entry Delete Cancel Test
+		</Test>
+		<Test app="OEDeleteTest" dir="../testbin">
+			Order Entry Delete Test
+		</Test>
+	</TestGroup>
+</TestGroups>

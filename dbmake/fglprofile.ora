@@ -1,0 +1,13 @@
+dbi.database.custdemo.source = "generodb"
+dbi.database.custdemo.driver = "dbmora"
+dbi.database.custdemo.ora.schema = "custdemo"
+dbi.database.custdemo.ora.temptables.schema.source = "command"
+dbi.database.custdemo.ora.temptables.schema.command = "SELECT SYS_CONTEXT('USERENV','SESSION_USER') FROM DUAL"
+dbi.database.custdemo.ifxemul.temptables.emulation = "private"
+dbi.database.custdemo.ifxemul.datatype.date = true
+dbi.database.custdemo.ifxemul.datatype.datetime = true
+dbi.database.custdemo.ifxemul.datatype.serial.emulation = "native"
+
+#This is only for demo purposes
+dbi.database.custdemo.username = "custdemo"
+dbi.database.custdemo.password = "fourjs"
