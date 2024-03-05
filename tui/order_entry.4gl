@@ -25,6 +25,9 @@ MAIN
    
    OPEN WINDOW orderForm WITH FORM "orders"
 
+   VAR dbType = upshift(fgl_db_driver_type())
+   ERROR SFMT("Using database engine: %1", dbType)
+
    LET quitFlag = FALSE
    WHILE NOT quitFlag
 
