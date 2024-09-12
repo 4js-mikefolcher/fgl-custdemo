@@ -58,8 +58,8 @@ PUBLIC FUNCTION insertOrderRec(
 
 	LET r_order.order_num = 0
 
-	INSERT INTO orders (order_num, order_date, store_num, fac_code, ship_instr, promo)
-		VALUES (r_order.order_num, r_order.order_date, r_order.store_num, r_order.fac_code, r_order.ship_instr, r_order.promo)
+	INSERT INTO orders (order_date, store_num, fac_code, ship_instr, promo)
+		VALUES (r_order.order_date, r_order.store_num, r_order.fac_code, r_order.ship_instr, r_order.promo)
 
 	LET r_order.order_num = sqlca.sqlerrd[2]
 

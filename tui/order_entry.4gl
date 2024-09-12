@@ -13,6 +13,8 @@ DEFINE queryText VARCHAR(500)
 DEFINE factoryName LIKE factory.fac_name
 DEFINE customerName LIKE customer.store_name
 DEFINE stockDesc LIKE stock.description
+DEFINE resultCount INTEGER
+DEFINE displayIdx INTEGER
 
 MAIN
    DEFINE quitFlag SMALLINT
@@ -105,6 +107,7 @@ END FUNCTION #prepareSQL
 FUNCTION orderQuery()
    DEFINE wherePart CHAR(200)
 
+   DISPLAY "Query Mode" TO formonly.screen_info
    CONSTRUCT wherePart ON orders.* FROM s_orders.*
 
       ON KEY (CONTROL-T)
@@ -134,6 +137,7 @@ FUNCTION orderQuery()
 
    LET int_flag = FALSE
 
+   LET resultCount = 0
    LET queryText = "SELECT orders.*, factory.fac_name, customer.store_name FROM orders",
                    " INNER JOIN factory ON factory.fac_code = orders.fac_code",
                    " INNER JOIN customer ON customer.store_num = orders.store_num",
@@ -155,8 +159,10 @@ FUNCTION fetchOrder(fetchAction)
    DEFINE idx INTEGER
    DEFINE orderTotal, orderSubtotal DECIMAL(12,2)
 
+   DISPLAY "Query Result Set" TO formonly.screen_info
+
    CASE UPSHIFT(fetchAction)
-      WHEN "F" 
+      WHEN "F"
          FETCH FIRST cursOrderQuery INTO r_orders.*, factoryName, customerName
       WHEN "P" 
          FETCH PREVIOUS cursOrderQuery INTO r_orders.*, factoryName, customerName
@@ -200,7 +206,7 @@ FUNCTION fetchOrder(fetchAction)
          END FOREACH
          DISPLAY orderTotal TO formonly.order_total
 
-      END IF 
+      END IF
       RETURN TRUE
    END IF
 
@@ -255,17 +261,24 @@ FUNCTION enterOrder(addMode)
    DEFINE addMode SMALLINT
    DEFINE recNotFound SMALLINT
    DEFINE rowIdx INTEGER
+   DEFINE orderTotal DECIMAL(12,2)
 
    IF addMode THEN
       INITIALIZE r_orders.* TO NULL
       LET r_orders.order_num = 0
       CALL a_items.clear()
+      LET orderTotal = 0
+      DISPLAY "Add Mode" TO formonly.screen_info
+   ELSE
+      LET orderTotal = calcRowTotal()
+      DISPLAY "Edit Mode" TO formonly.screen_info
    END IF
    
    INPUT r_orders.* WITHOUT DEFAULTS FROM s_orders.*
 
       BEFORE INPUT
-         LET recNotFound = FALSE 
+         LET recNotFound = FALSE
+         DISPLAY orderTotal TO formonly.order_total
 
       ON KEY (CONTROL-T)
          CASE
@@ -397,13 +410,15 @@ FUNCTION enterOrder(addMode)
             NEXT FIELD quantity
          END IF
 
+      AFTER ROW
+         LET orderTotal = calcRowTotal()
+         DISPLAY orderTotal TO formonly.order_total
+
    END INPUT
 
    IF int_flag THEN
       RETURN FALSE
    END IF
-
-   #BEGIN WORK
 
    IF addMode THEN
 
@@ -426,8 +441,6 @@ FUNCTION enterOrder(addMode)
       LET a_items[rowIdx].order_num = r_orders.order_num
       EXECUTE insertItems USING a_items[rowIdx].*
    END FOR
-
-   #COMMIT WORK
 
    RETURN TRUE
 
@@ -469,6 +482,21 @@ FUNCTION deleteOrder()
    RETURN deleteRecord
 
 END FUNCTION #deleteOrder
+
+FUNCTION calcRowTotal()
+   DEFINE rowIdx INTEGER
+   DEFINE orderTotal, rowTotal DECIMAL(12,2) 
+
+   LET orderTotal = 0
+   FOR rowIdx = 1 TO a_items.getLength()
+      LET rowTotal = NVL(a_items[rowIdx].price,0) * NVL(a_items[rowIdx].quantity,0)
+      LET orderTotal += NVL(rowTotal, 0)
+   END FOR
+
+   ERROR SFMT("Order Total: %1", orderTotal)
+   RETURN orderTotal
+
+END FUNCTION
 
 FUNCTION errorHandler()
 

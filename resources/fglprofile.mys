@@ -1,0 +1,5 @@
+dbi.database.custdemo.source = "custdemo@fgl-sql-dev-mysqldb-1"
+dbi.database.custdemo.driver = "dbmmys"
+
+dbi.database.custdemo.username = "genero"
+dbi.database.custdemo.password = "Pass123"
